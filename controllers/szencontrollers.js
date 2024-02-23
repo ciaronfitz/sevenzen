@@ -129,7 +129,7 @@ exports.getMoodHistory = (req, res) => {
 exports.getLoginScreen = (req, res) => {
     var userinfo = {};
     const {isloggedin, userid, loginSuccessful} = req.session;
-    res.render('login', {loggedin: isloggedin, loginSuccessful: loginSuccessful});
+    res.render('login', {loggedin: isloggedin, loginSuccessful: true});
 };
 
 //load the registration screen of the web app
@@ -185,7 +185,7 @@ exports.postLogin = (req,res) => {
           session.isloggedin = false;
           session.loginSuccessful = "fail";
           // Change this line to redirect to the login page
-          res.redirect('/login');
+          res.render('login', {loggedin: false, loginSuccessful: false});
         };
     });
 };
