@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SEVENZEN</title>
+  <link rel="icon" href="/sevenzen.ico" sizes="any" type="image/svg+xml">
+  <link rel="stylesheet" href="/mystyles.css">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="icon" type="image/x-icon" href="/sevenzen.svg">
+</head>
+
+<body>
+  <%- include('header'); %>
+    <% if (loginSuccessful="fail" ) { %>
+      <div class="alert alert-danger" role="alert">Login failed. Please try again.</div>
+      <% } %>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+          crossorigin="anonymous"></script>
+        <main>
+          <div class="container-fluid pb-3">
+            <form method="post" action="/login">
+
+              <div class="row mb-3 ml-3 mr-3 pt-3 pb-3">
+                <label for="inputEmail3" class="form-label">Email</label>
+                <input type="email" name="useremail" class="form-control" id="inputEmail3">
+              </div>
+              <div class="row mb-3 ml-3 mr-3 pt-3 pb-3">
+                <label for="inputPassword5" class="form-label">Password</label>
+                <input type="password" name="userpass" id="inputPassword5" class="form-control"
+                  aria-describedby="passwordHelpBlock">
+              </div>
+              <button type="submit" class="btn btn-primary  ml-3 mr-3 pt-3 pb-3">Sign in</button>
+          </div>
+          </form>
+          </div>
+        </main>
+</body>

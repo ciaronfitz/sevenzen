@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SEVENZEN</title>
+    <link rel="icon" href="/sevenzen.ico" sizes="any" type="image/svg+xml">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="/mystyles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
+        integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <%- include('header'); %>
+        <main class="container">
+            <div class="card mb-3">
+                <canvas id="bkgcanvas" height="500"></canvas>
+            </div>
+        </main>
+
+        <script>
+            //convert data from ejs to js
+            var chartinput = {
+                avg_enjoyment: <%= chartinput.avg_enjoyment %>,
+                avg_sadness: <%= chartinput.avg_sadness %>,
+                avg_anger: <%= chartinput.avg_anger %>,
+                avg_contempt: <%= chartinput.avg_contempt %>,
+                avg_disgust: <%= chartinput.avg_disgust %>,
+                avg_fear: <%= chartinput.avg_fear %>,
+                avg_surprise: <%= chartinput.avg_surprise %>
+            };
+
+            //create chart
+            var yvals = [chartinput.avg_enjoyment, chartinput.avg_sadness, chartinput.avg_anger, chartinput.avg_contempt, chartinput.avg_disgust, chartinput.avg_fear, chartinput.avg_surprise];
+            const xlabels = ["Enjoyment", "Sadness", "Anger", "Contempt", "Disgust", "Fear", "Surprise"];
+            const chartdata = {
+                labels: xlabels,
+                datasets: [{
+                    data: yvals,
+                    lineTension: 0,
+                    pointRadius: 3,
+                }]
+            };
+
+            const chartconfig = {
+                type: 'bar',
+                data: chartdata,
+                options: {
+                    backgroundColor: 'rgb(109, 60, 149)',
+                    animation: true,
+                    maintainaspectratio: true,
+                    responsive: true,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false },
+                        title: { display: true, text: 'Average Intensity of Each Emotion' }
+                    }
+                }
+            };
+
+            const chart = new Chart(document.getElementById('bkgcanvas').getContext('2d'), chartconfig);
+        </script>
+</body>
+
+</html>
