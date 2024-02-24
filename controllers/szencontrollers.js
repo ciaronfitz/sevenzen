@@ -365,7 +365,11 @@ exports.getChart = (req, res) => {
     } else {
       console.log(rows[0]);
       const userinfo = {name: req.session.name};
-      res.render('chart', {chartinput: rows[0], loggedin: isloggedin, userinfo: req.session.name});
+      if (rows[0].avg_enjoyment === null) {
+        res.render('chart', {chartinput: rows[0], loggedin: isloggedin, userinfo: req.session.name, chartempty: true});
+      } else {
+      res.render('chart', {chartinput: rows[0], loggedin: isloggedin, userinfo: req.session.name, chartempty: false});
+      }
     }
   });
 };
