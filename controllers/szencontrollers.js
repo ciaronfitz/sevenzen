@@ -1,4 +1,5 @@
 const e = require('express');
+const bcrypt = require('bcrypt');
 const conn = require('./../utils/dbconn');
 
 //load the home screen of the web app
@@ -135,59 +136,75 @@ exports.getLoginScreen = (req, res) => {
 //load the registration screen of the web app
 exports.getRegistrationScreen = (req, res) => {
     var userinfo = {};
-    res.render('register', {loggedin: false});
+    res.render('register', {loggedin: false, emailExists: false});
 };
 
 //post the registration details to the database
-exports.postregistration = (req, res) => {
-    const {firstname, lastname, useremail, password_new, password_new_verify} = req.body;
-    const vals = [firstname, lastname, useremail, password_new, password_new_verify];
+exports.postregistration = async (req, res) => {
+    const {firstname, lastname, useremail, password_new} = req.body;
+    const hashedPassword = await bcrypt.hash(password_new, 13);
+    const vals = [firstname, lastname, useremail, hashedPassword];
     console.log(vals);
     var registration_successful;
 
-    if (password_new === password_new_verify) {
-        const insertSQL = 'INSERT INTO user (user_id, first_name, last_name, email, password) VALUES (NULL, ?, ?, ?, ?)';
-        conn.query(insertSQL, vals, (err, rows) => {
-            if (err) throw err;
+    //check if email is already registered
+    const checkEmailSQL = 'SELECT email FROM user WHERE email = ?';
+    conn.query(checkEmailSQL, useremail, (err, rows) => {
+        if (err) throw err;
+        console.log(rows);
+        if (rows.length > 0) {
+            console.log('Email already registered');
+            res.render('register', {loggedin: false, registrationSuccessful: false, emailExists: true});
+        } else {
+          const insertSQL = 'INSERT INTO user (user_id, first_name, last_name, email, password) VALUES (NULL, ?, ?, ?, ?)';
+          conn.query(insertSQL, vals, (err, rows) => {
+            if (err) {
+              throw err;
+            } else {
             console.log(rows);
             res.redirect('/login');
-        })
-     } else {
-      const registration_unsuccessful = false;
-            res.render('register', {registration_successful: registration_unsuccessful, loggedin: false});
-        };
-    };
+            }
+          })
+            
+        }
+    });
+};
 
 //post the login details to the database
-exports.postLogin = (req,res) => {
+exports.postLogin = async (req,res) => {
     const {useremail, userpass} = req.body;
     console.log(useremail, userpass);
-    const vals = [useremail, userpass];
+    const vals = [useremail, userpass ];
     console.log(vals);
 
-    const checkUserSQL = `SELECT user_id, first_name FROM user WHERE email = '${useremail}' AND password = '${userpass}'`;
+    const checkUserSQL = `SELECT user_id, first_name, password FROM user WHERE email = ?`;
 
     conn.query(checkUserSQL, vals, (err, rows) => {
-        if (err) throw err;
+    if (err) throw err;
 
-        const numrows = rows.length;
-        if(numrows > 0) {
-          console.log(rows);
-          const session=req.session;
-          session.isloggedin = true;
-          session.user_id = rows[0].user_id;
-          session.name = rows[0].first_name;
-          session.loginSuccessful = 'pass';
-          console.log(session);
-          res.redirect('/');
-        } else {
-          const session=req.session;
-          session.isloggedin = false;
-          session.loginSuccessful = "fail";
-          // Change this line to redirect to the login page
-          res.render('login', {loggedin: false, loginSuccessful: false});
-        };
-    });
+    const numrows = rows.length;
+    if (numrows > 0) {
+      const isMatch = bcrypt.compare(userpass, rows[0].password);
+      if (isMatch) {
+      console.log('found user');
+      console.log(rows);
+      const session = req.session;
+      session.isloggedin = true;
+      session.user_id = rows[0].user_id;
+      session.name = rows[0].first_name;
+      session.loginSuccessful = 'pass';
+      console.log(session);
+      res.redirect('/');
+      }
+    } else {
+      console.log('user not found');
+      const session = req.session;
+      session.isloggedin = false;
+      session.loginSuccessful = "fail";
+      // Change this line to redirect to the login page
+      res.render('login', { loggedin: false, loginSuccessful: false });
+    };
+  });
 };
 
 //log the user out of the web app
