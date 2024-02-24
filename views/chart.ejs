@@ -102,10 +102,32 @@
                                 labels: ['Enjoyment', 'Sadness', 'Anger', 'Contempt', 'Disgust', 'Fear', 'Surprise'],
                                 datasets: [
                                     {
-                                        label: 'Average Emotion Intensity',
-                                        data: data
+                                        label: false,
+                                        data: data,
+                                        backgroundColor: [
+                                            'rgb(71, 30, 105)',
+                                            'SteelBlue',
+                                            'Teal',
+                                            'PaleVioletRed',
+                                            'PowderBlue',
+                                            'LightSkyBlue',
+                                            'LightBlue'
+
+                                        ],
                                     }
                                 ]
+                            },
+                            options: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 10
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                }
+
                             }
                         })
 
@@ -121,43 +143,64 @@
                                         label: 'Enjoyment',
                                         data: triggerdata.map(function (d) {
                                             return d.enjoyment;
-                                        })
+                                        }),
+                                        backgroundColor: [
+                                            'rgb(71, 30, 105)'
+                                        ],
                                     },
                                     {
                                         label: 'Sadness',
                                         data: triggerdata.map(function (d) {
                                             return d.sadness;
-                                        })
+                                        }),
+                                        backgroundColor: [
+                                            'SteelBlue'
+                                        ],
                                     },
                                     {
                                         label: 'Anger',
                                         data: triggerdata.map(function (d) {
                                             return d.anger;
-                                        })
+                                        }),
+                                        backgroundColor: [
+                                            'Teal'
+                                        ],
                                     },
                                     {
                                         label: 'Contempt',
                                         data: triggerdata.map(function (d) {
                                             return d.contempt;
-                                        })
+                                        }),
+                                        backgroundColor: [
+                                            'PaleVioletRed'
+                                        ],
                                     },
                                     {
                                         label: 'Disgust',
                                         data: triggerdata.map(function (d) {
                                             return d.disgust;
-                                        })
+                                        }),
+                                        backgroundColor: [
+                                            'PowderBlue'
+                                        ],
                                     },
                                     {
                                         label: 'Fear',
                                         data: triggerdata.map(function (d) {
                                             return d.fear;
-                                        })
+                                        }),
+                                        backgroundColor: [
+                                            'LightSkyBlue'
+                                        ],
                                     },
                                     {
                                         label: 'Surprise',
                                         data: triggerdata.map(function (d) {
                                             return d.surprise;
-                                        })
+                                        }),
+                                        backgroundColor: [
+                                            'LightBlue'
+                                        ],
                                     }
                                 ]
                             }
