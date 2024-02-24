@@ -194,7 +194,7 @@ exports.postLogin = async (req,res) => {
       session.name = rows[0].first_name;
       session.loginSuccessful = 'pass';
       console.log(session);
-      res.redirect('/');
+      res.redirect(req.session.route || '/');
       }
     } else {
       console.log('user not found');
@@ -202,7 +202,7 @@ exports.postLogin = async (req,res) => {
       session.isloggedin = false;
       session.loginSuccessful = "fail";
       // Change this line to redirect to the login page
-      res.render('login', { loggedin: false, loginSuccessful: false });
+      res.render('login', { loggedin: false, loginSuccessful: false,});
     };
   });
 };
