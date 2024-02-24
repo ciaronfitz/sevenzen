@@ -28,62 +28,140 @@
                 to see your chart.</div>
             <% } else { %>
                 <main class="container">
-                    <div class="card mb-3">
-
-                        <canvas id="bkgcanvas" height="500"></canvas>
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                    Average Emotion Intensity
+                                </button>
+                            </h2>
+                            <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <canvas id="avgcanvas" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                    aria-controls="flush-collapseTwo">
+                                    Emotions Based on Triggers
+                                </button>
+                            </h2>
+                            <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <canvas id="triggercanvas" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </main>
                 <% } %>
 
                     <script>
-
-                        //convert data from ejs to js
-                        var chartinput = {
-                            avg_enjoyment: <%= chartinput.avg_enjoyment %>,
-                            avg_sadness: <%= chartinput.avg_sadness %>,
-                            avg_anger: <%= chartinput.avg_anger %>,
-                            avg_contempt: <%= chartinput.avg_contempt %>,
-                            avg_disgust: <%= chartinput.avg_disgust %>,
-                            avg_fear: <%= chartinput.avg_fear %>,
-                            avg_surprise: <%= chartinput.avg_surprise %>
+                        //convert data from ejs to js for averages graph
+                        var data = {
+                            Enjoyment: <%= chartinput.avg_enjoyment %>,
+                            Sadness: <%= chartinput.avg_sadness %>,
+                            Anger: <%= chartinput.avg_anger %>,
+                            Contempt: <%= chartinput.avg_contempt %>,
+                            Disgust: <%= chartinput.avg_disgust %>,
+                            Fear: <%= chartinput.avg_fear %>,
+                            Surprise: <%= chartinput.avg_surprise %>
                         };
 
-                        //create chart
-                        var yvals = [chartinput.avg_enjoyment, chartinput.avg_sadness, chartinput.avg_anger, chartinput.avg_contempt, chartinput.avg_disgust, chartinput.avg_fear, chartinput.avg_surprise];
-                        const xlabels = ["Enjoyment", "Sadness", "Anger", "Contempt", "Disgust", "Fear", "Surprise"];
-                        const chartdata = {
-                            labels: xlabels,
-                            datasets: [{
-                                data: yvals,
-                                lineTension: 0,
-                                pointRadius: 3,
-                            }]
-                        };
+                        //convert data for triggers graph
+                        var triggerdata = [];
+                        <% for (var i = 0; i < charttriggers.length; i++) { %>
+                            triggerdata.push({
+                                trigger: '<%= charttriggers[i].emotrigger_name %>',
+                                enjoyment: <%= charttriggers[i].avg_enjoyment %>,
+                                sadness: <%= charttriggers[i].avg_sadness %>,
+                                anger: <%= charttriggers[i].avg_anger %>,
+                                contempt: <%= charttriggers[i].avg_contempt %>,
+                                disgust: <%= charttriggers[i].avg_disgust %>,
+                                fear: <%= charttriggers[i].avg_fear %>,
+                                surprise: <%= charttriggers[i].avg_surprise %>
+                            });
+                        <% } %>
 
-                        const chartconfig = {
+                            //Troubleshooting
+                            console.log('inside script tags');
+                        console.log(data);
+                        console.log(triggerdata);
+
+                        //create averages chart
+                        new Chart(document.getElementById('avgcanvas'), {
                             type: 'bar',
-                            data: chartdata,
-                            options: {
-                                backgroundColor: 'rgb(109, 60, 149)',
-                                animation: true,
-                                maintainaspectratio: true,
-                                responsive: true,
-                                scales: {
-                                    y: {
-                                        min: 0,
-                                        max: 10,
-                                        beginAtZero: true
+                            data: {
+                                labels: ['Enjoyment', 'Sadness', 'Anger', 'Contempt', 'Disgust', 'Fear', 'Surprise'],
+                                datasets: [
+                                    {
+                                        label: 'Average Emotion Intensity',
+                                        data: data
                                     }
-                                },
-                                plugins: {
-                                    legend: { display: false },
-                                    tooltip: { enabled: false },
-                                    title: { display: true, text: 'Average Intensity of Each Emotion' }
-                                }
+                                ]
                             }
-                        };
+                        })
 
-                        const chart = new Chart(document.getElementById('bkgcanvas').getContext('2d'), chartconfig);
+                        //create triggers chart
+                        new Chart(document.getElementById('triggercanvas'), {
+                            type: 'bar',
+                            data: {
+                                labels: triggerdata.map(function (d) {
+                                    return d.trigger;
+                                }),
+                                datasets: [
+                                    {
+                                        label: 'Enjoyment',
+                                        data: triggerdata.map(function (d) {
+                                            return d.enjoyment;
+                                        })
+                                    },
+                                    {
+                                        label: 'Sadness',
+                                        data: triggerdata.map(function (d) {
+                                            return d.sadness;
+                                        })
+                                    },
+                                    {
+                                        label: 'Anger',
+                                        data: triggerdata.map(function (d) {
+                                            return d.anger;
+                                        })
+                                    },
+                                    {
+                                        label: 'Contempt',
+                                        data: triggerdata.map(function (d) {
+                                            return d.contempt;
+                                        })
+                                    },
+                                    {
+                                        label: 'Disgust',
+                                        data: triggerdata.map(function (d) {
+                                            return d.disgust;
+                                        })
+                                    },
+                                    {
+                                        label: 'Fear',
+                                        data: triggerdata.map(function (d) {
+                                            return d.fear;
+                                        })
+                                    },
+                                    {
+                                        label: 'Surprise',
+                                        data: triggerdata.map(function (d) {
+                                            return d.surprise;
+                                        })
+                                    }
+                                ]
+                            }
+                        })
                     </script>
 </body>
 

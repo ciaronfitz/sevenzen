@@ -375,18 +375,33 @@ exports.getChart = (req, res) => {
   var userinfo = {}; //userinfo is an array that will be used to store the user's name and user_id
   const {isloggedin, user_id} = req.session;
   //enjoyment, sadness, anger, contempt, disgust, fear, surprise
-  const countSQL = 'SELECT AVG(enjoyment) AS avg_enjoyment, AVG(sadness) AS avg_sadness, AVG(anger) AS avg_anger, AVG(contempt) AS avg_contempt, AVG(disgust) AS avg_disgust, AVG(fear) AS avg_fear, AVG(surprise) AS avg_surprise FROM emotion_log WHERE user_id=?;';
-  conn.query(countSQL, req.session.user_id, (err, rows) => {
+  
+  const averagesSQL = 'SELECT AVG(enjoyment) AS avg_enjoyment, AVG(sadness) AS avg_sadness, AVG(anger) AS avg_anger, AVG(contempt) AS avg_contempt, AVG(disgust) AS avg_disgust, AVG(fear) AS avg_fear, AVG(surprise) AS avg_surprise FROM emotion_log WHERE user_id=?;';
+  conn.query(averagesSQL, req.session.user_id, (err, averages) => {
     if (err) {
       throw err;
     } else {
-      console.log(rows[0]);
+      console.log(averages[0]);
       const userinfo = {name: req.session.name};
-      if (rows[0].avg_enjoyment === null) {
-        res.render('chart', {chartinput: rows[0], loggedin: isloggedin, userinfo: req.session.name, chartempty: true});
+      if (averages[0].avg_enjoyment === null) {
+        res.render('chart', {chartinput: averages[0], charttriggers: [], loggedin: isloggedin, userinfo: req.session.name, chartempty: true});
       } else {
-      res.render('chart', {chartinput: rows[0], loggedin: isloggedin, userinfo: req.session.name, chartempty: false});
+          const triggersSQL = 'SELECT emotrigger.emotrigger_name, AVG(emotion_log.enjoyment) AS avg_enjoyment, AVG(emotion_log.sadness) AS avg_sadness, AVG(emotion_log.anger) AS avg_anger, AVG(emotion_log.contempt) AS avg_contempt, AVG(emotion_log.disgust) AS avg_disgust, AVG(emotion_log.fear) AS avg_fear, AVG(emotion_log.surprise) AS avg_surprise FROM emotion_log INNER JOIN emotrigger_emotion_log ON emotion_log.emotion_log_id = emotrigger_emotion_log.emotion_log_id INNER JOIN emotrigger ON emotrigger_emotion_log.emotrigger_id = emotrigger.emotrigger_id GROUP BY emotrigger.emotrigger_name';
+          conn.query(triggersSQL, (err, triggers) => {
+          if (err) {
+      throw err;
+      } else {
+        if (triggers.length === 0) {
+          res.render('chart', {chartinput: averages[0], charttriggers: triggers, loggedin: isloggedin, userinfo: req.session.name, chartempty: true});
+        } else {
+          console.log(triggers);
+          res.render('chart', {chartinput: averages[0], charttriggers: triggers, loggedin: isloggedin, userinfo: req.session.name, chartempty: false});
+        }
+     }
+    });
       }
     }
   });
+  
+
 };
