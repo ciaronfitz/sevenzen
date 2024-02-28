@@ -11,7 +11,6 @@ router.get('/logout', controller.logout);
 router.get('/register', controller.getRegistrationScreen);
 router.get('/select/:id', isAuthenticated, controller.selectLog);
 router.get('/delete/:id', isAuthenticated, controller.deleteMoodLog);
-router.get('/newlog', isAuthenticated, controller.getNewMoodLog);
 router.get('/chart', isAuthenticated, controller.getChart);
 
 router.post('/log', controller.postNewMoodLog);
