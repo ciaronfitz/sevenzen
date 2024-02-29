@@ -33,7 +33,8 @@
                         <% var surprise=row.surprise; %>
                           <% var emotion_log_id=row.emotion_log_id; %>
                             <% var text=row.user_notes; %>
-                              <% var ukTime=row.time_stamp.toLocaleString('en-GB', { timeZone: 'Europe/London' }); %>
+                              <% var ukTime=new Date(row.time_stamp).toLocaleString('en-GB', { timeZone: 'Europe/London'
+                                }); %>
                                 <div class="card mb-3">
                                   <div class="card-body">
                                     <h5 class="card-title">

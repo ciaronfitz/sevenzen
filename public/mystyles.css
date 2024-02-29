@@ -65,5 +65,24 @@ button[type=submit]:hover{
 .btn-check:checked + .btn-outline-primary, .btn-check:active + .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .show > .btn-outline-primary.dropdown-toggle {
     background-color: purple;
     color: white;
-    border-color: purple;
+    border-color: #800080;
   }
+  
+  @keyframes breathe {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.breathe-animation {
+    animation: breathe 7s;
+    /* Adjust the duration and iteration count as needed */
+}
