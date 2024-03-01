@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const conn = require('./../utils/dbconn');
 const axios = require('axios');
 
-//NO UPDATE REQUIRED load the home screen of the web app
+//Load the home screen of the web app
 exports.getHome = (req, res) => {
 
     var userinfo = {}; //userinfo is an array that will be used to store the user's name and user_id
@@ -17,7 +17,7 @@ exports.getHome = (req, res) => {
         
 };
 
-//UPDATED FOR API - load the mood logger screen of the web app
+//Load the mood logger screen of the web app
 exports.getLogger = (req, res) => {
     var userinfo = {}; //userinfo is an array that will be used to store the user's name and user_id
     const {isloggedin, userid} = req.session;
@@ -39,10 +39,9 @@ exports.getLogger = (req, res) => {
         console.log(response.data);
         if (status == 200) {
           console.log('data retreived');
-          const selectemotions = response.data.selectemotions;
           const selecttriggers = response.data.selecttriggers;
           const userInfo = {name: req.session.name};
-          res.render('log', { selectemotions, selecttriggers, loggedin: isloggedin, userinfo: session.name});
+          res.render('log', {selecttriggers, loggedin: isloggedin, userinfo: session.name});
         }
       })
       .catch ((error) => {
@@ -50,7 +49,7 @@ exports.getLogger = (req, res) => {
       });
     };
 
-//UPDATED FOR API - post the mood log to the database
+//Post the mood log to the database
 exports.postNewMoodLog = (req, res) => {
   const isLoggedin = req.session.isloggedin; //isLoggedin is a boolean that will be used to check if the user is logged in
   const user_id = req.session.user_id; //user_id is an integer that will be used to store the user's id
