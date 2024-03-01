@@ -59,6 +59,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseThree" aria-expanded="false"
+                                    aria-controls="flush-collapseThree">
+                                    Emotions Over Time
+                                </button>
+                            </h2>
+                            <div id="flush-collapseThree" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <canvas id="timecanvas" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </main>
                 <% } %>
@@ -90,10 +105,27 @@
                             });
                         <% } %>
 
+                        //convert data for time graph
+                        var timeData = [];
+                        <% for (var i = 0; i < charttime.length; i++) { %>
+                            <% var ukTime = new Date(charttime[i].time_stamp).toLocaleString('en-GB', { timeZone: 'Europe/London' }); %>
+                                timeData.push({
+                                    date: '<%= ukTime%>',
+                                    enjoyment: <%= charttime[i].enjoyment %>,
+                                    sadness: <%= charttime[i].sadness %>,
+                                    anger: <%= charttime[i].anger %>,
+                                    contempt: <%= charttime[i].contempt %>,
+                                    disgust: <%= charttime[i].disgust %>,
+                                    fear: <%= charttime[i].fear %>,
+                                    surprise: <%= charttime[i].surprise %>
+                            });
+                        <% } %>
+
                             //Troubleshooting
                             console.log('inside script tags');
                         console.log(data);
                         console.log(triggerdata);
+                        console.log(timeData);
 
                         //create averages chart
                         new Chart(document.getElementById('avgcanvas'), {
@@ -201,6 +233,74 @@
                                         backgroundColor: [
                                             'LightBlue'
                                         ],
+                                    }
+                                ]
+                            }
+                        })
+
+                        //create time chart
+                        new Chart(document.getElementById('timecanvas'), {
+                            type: 'line',
+                            data: {
+                                labels: timeData.map(function (d) {
+                                    return d.date;
+                                }),
+                                datasets: [
+                                    {
+                                        label: 'Enjoyment',
+                                        data: timeData.map(function (d) {
+                                            return d.enjoyment;
+                                        }),
+                                        borderColor: 'rgb(71, 30, 105)',
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Sadness',
+                                        data: timeData.map(function (d) {
+                                            return d.sadness;
+                                        }),
+                                        borderColor: 'SteelBlue',
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Anger',
+                                        data: timeData.map(function (d) {
+                                            return d.anger;
+                                        }),
+                                        borderColor: 'Teal',
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Contempt',
+                                        data: timeData.map(function (d) {
+                                            return d.contempt;
+                                        }),
+                                        borderColor: 'PaleVioletRed',
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Disgust',
+                                        data: timeData.map(function (d) {
+                                            return d.disgust;
+                                        }),
+                                        borderColor: 'PowderBlue',
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Fear',
+                                        data: timeData.map(function (d) {
+                                            return d.fear;
+                                        }),
+                                        borderColor: 'LightSkyBlue',
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Surprise',
+                                        data: timeData.map(function (d) {
+                                            return d.surprise;
+                                        }),
+                                        borderColor: 'LightBlue',
+                                        fill: false
                                     }
                                 ]
                             }

@@ -349,10 +349,11 @@ exports.getChart = (req, res) => {
       const chartinput = response.data.chartinput;
       const charttriggers = response.data.charttriggers;
       const chartempty = response.data.chartempty;
-      res.render('chart', {chartinput: chartinput, charttriggers: charttriggers, loggedin: isloggedin, userinfo: req.session.name, chartempty : chartempty});
+      const charttime = response.data.charttime;
+      res.render('chart', {chartinput: chartinput, charttriggers: charttriggers, charttime: charttime, loggedin: isloggedin, userinfo: req.session.name, chartempty : chartempty});
     } else {
       console.log('no data');
-      res.render('chart', {chartinput: [], charttriggers: [], loggedin: isloggedin, userinfo: req.session.name, chartempty: true});
+      res.render('chart', {chartinput: [], charttriggers: [], charttime: [], loggedin: isloggedin, userinfo: req.session.name, chartempty: true});
     }
   })
   .catch((error) => {
