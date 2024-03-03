@@ -11,8 +11,8 @@ exports.getHome = (req, res) => {
     console.log(`User data is ${isloggedin} and ${user_id}`); 
     const session=req.session; //session is an object that will be used to store the user's session data
 
-    //if the user is logged in, the user's name will be stored in the username variable
-    res.render('index', {loggedin: isloggedin, userinfo: session.name});
+    //if the user is logged in, the user's name will be stored in the username variable to customise the header and the home screen
+    res.render('index', {loggedin: isloggedin, userinfo: session.name, errorhandler: "clear"});
         
 };
 
@@ -21,12 +21,16 @@ exports.getLogger = (req, res) => {
     var userinfo = {}; //userinfo is an array that will be used to store the user's name and user_id
     const {isloggedin, userid} = req.session;
     const session=req.session; //session is an object that will be used to store the user's session data
+    
+    //for diagnostic purposes
     console.log(session);
     console.log(session.isloggedin);
     console.log(session.user_id);
 
+    //set endpoint for the API
     const endpoint = 'http://localhost:3001/logger';
     
+    //get triggers for use in the mood logger
     axios
     .get(endpoint, req.body, {
       validateStatus: function (status) {
@@ -35,18 +39,26 @@ exports.getLogger = (req, res) => {
       })
       .then((response) => {
         const status = response.status;
+
+        //for diagnostic purposes
         console.log(response.data);
+
+        //if successful, store triggers in selecttriggers variable and render the mood logger screen
         if (status == 200) {
           console.log('data retreived');
           const selecttriggers = response.data.selecttriggers;
           const userInfo = {name: req.session.name};
           res.render('log', {selecttriggers, loggedin: isloggedin, userinfo: session.name});
+        } else {
+        //if unsuccessful, render the home screen
+          console.log('no data');
+          res.render('index', {loggedin: isloggedin, userinfo: session.name, errorhandler: "Error retreiving triggers. Please try again later."});
         }
       })
       .catch ((error) => {
         console.error(error);
       });
-    };
+};
 
 //Post the mood log to the database
 exports.postNewMoodLog = (req, res) => {
@@ -72,6 +84,8 @@ exports.postNewMoodLog = (req, res) => {
       if (status == 200) {
         console.log('log inserted');
         res.redirect('/history');
+      } else {
+        res.render('index', {loggedin: isLoggedin, userinfo: req.session.name, errorhandler: "Error inserting log. Please try again later."});
       }
     })
     .catch ((error) => {
@@ -111,7 +125,7 @@ exports.getMoodHistory = (req, res) => {
         .catch ((error) => {
           console.error(error);
         });
-      };
+};
 
 //NO UPDATE NEEDED - load the log in screen of the web app
 exports.getLoginScreen = (req, res) => {
@@ -259,9 +273,10 @@ exports.selectLog = (req, res) => {
       console.log(response.data.data[0]);
       res.render('editlog', { details: response.data.data, triggers: response.data.triggers, selecttriggers: response.data.selecttriggers, loggedin: isloggedin, userinfo: session.name });
     } else if (status == 403) {
-      res.redirect('/');
+      //unauthorised access
+      res.render('index', {loggedin: isloggedin, userinfo: session.name, errorhandler: "You do not have access to that log."});
     } else {
-      res.redirect('/');
+      res.render('index', {loggedin: isloggedin, userinfo: session.name, errorhandler: "We're having some issues right now. Please try again later."});
     }
   })
   .catch((error) => {
@@ -293,6 +308,8 @@ exports.editMoodLog = async (req, res) => {
       if (status == 200) {
         console.log('log updated');
         res.redirect('/history');
+      } else {
+        res.render('index', {loggedin: isloggedin, userinfo: session.name, errorhandler: "Error updating log. Please try again later."});
       }
     })
     .catch((error) => {
@@ -318,6 +335,8 @@ exports.deleteMoodLog = (req, res) => {
     if (status == 200) {
       console.log('log deleted');
       res.redirect('/history');
+    } else {
+      res.render('index', {loggedin: isloggedin, userinfo: session.name, errorhandler: "Error deleting log. Please try again later."});
     }
   })
   .catch((error) => {

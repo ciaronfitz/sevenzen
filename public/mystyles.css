@@ -68,7 +68,7 @@ button[type=submit]:hover{
     border-color: #800080;
   }
   
-  @keyframes breathe {
+@keyframes breathe {
     0% {
         transform: scaleX(1);
     }
