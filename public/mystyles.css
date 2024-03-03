@@ -70,19 +70,52 @@ button[type=submit]:hover{
   
   @keyframes breathe {
     0% {
-        transform: scale(1);
+        transform: scaleX(1);
     }
 
     50% {
-        transform: scale(1.5);
+        transform: scaleX(1.5);
     }
 
     100% {
+        transform: scaleX(1);
+    }
+}
+
+@media (max-width: 576px) {
+    .breathe-animation-home {
+        width: 100%;
+    }
+}
+
+@keyframes breathe-home {
+    0% {
+        transform: scale(0.5);
+        rotate: 0deg;
+        opacity: 0.5;
+    }
+
+    50% {
         transform: scale(1);
+        rotate: 180deg;
+        opacity: 1 ;
+    }
+
+    100% {
+        transform: scale(0.5);
+        rotate: 360deg;
+        opacity: 0.5;
     }
 }
 
 .breathe-animation {
     animation: breathe 7s;
+    /* Adjust the duration and iteration count as needed */
+}
+
+.breathe-animation-home {
+    animation: breathe-home 10s;
+    animation-iteration-count: infinite;
+    width: 100%;
     /* Adjust the duration and iteration count as needed */
 }

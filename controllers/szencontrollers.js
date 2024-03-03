@@ -1,6 +1,5 @@
 const e = require('express');
 const bcrypt = require('bcrypt');
-const conn = require('./../utils/dbconn');
 const axios = require('axios');
 
 //Load the home screen of the web app

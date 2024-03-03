@@ -17,28 +17,44 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
         <main>
-            <div id="carouselExampleSlidesOnly" class="carousel slide" style="background-color: rgb(71, 30, 105)"
-                data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="/CAR1.svg" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="/CAR2.svg" class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="/CAR3.svg" class="d-block w-100" alt="...">
+            <% if (loggedin) { %>
+                <div container>
+                    <div class="container-fluid">
+                        <figure class="text-center" style="color:  rgb(71, 30, 105);">
+                            <h1>Welcome back <%= userinfo %>
+                            </h1>
+                            <p1 class="text-center">Let's take a breath before you move on</p1>
+                        </figure>
+                        <img src="/BreatheAnimation.png" class="d-block w-100, breathe-animation-home" alt="...">
                     </div>
                 </div>
-            </div>
-            <div class="container-fluid">
-                <figure class="text-center" style="color:  rgb(71, 30, 105);">
-                    <h1>Welcome to</h1>
-                    <h1>SevenZen</h1>
-                    <p1 class="text-center">A place to track your emotions and what triggers them, find out more about
-                        the seven emotions here</p1>
-                </figure>
-            </div>
+
+                <% } else { %>
+                    <div id="carouselExampleSlidesOnly" class="carousel slide"
+                        style="background-color: rgb(71, 30, 105)" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="/CAR1.svg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/CAR2.svg" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/CAR3.svg" class="d-block w-100" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <figure class="text-center" style="color:  rgb(71, 30, 105);">
+                            <h1>Welcome to</h1>
+                            <h1>SevenZen</h1>
+                            <p1 class="text-center">A place to track your emotions and what triggers them, find out
+                                more
+                                about
+                                the seven emotions <a href="https://www.paulekman.com/universal-emotions/">here</a></p1>
+                        </figure>
+                    </div>
+                    <% } %>
         </main>
 </body>
 
