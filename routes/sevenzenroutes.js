@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 const controller = require('./../controllers/szencontrollers');
 const { isAuthenticated } = require('../middleware/auth');
 const router = express.Router();
