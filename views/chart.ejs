@@ -40,7 +40,15 @@
                             <div id="flush-collapseOne" class="accordion-collapse collapse"
                                 data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body">
-                                    <canvas id="avgcanvas" height="200"></canvas>
+                                    //accessibility of canvas elements for screen readers code adapted from
+                                    https://pauljadam.com/demos/canvas.html
+                                    <canvas id="avgcanvas" height="200" aria-label="Chart showing average emotion intensity over time.                             Enjoyment: <%= chartinput.avg_enjoyment %>,
+                                        Sadness: <%= chartinput.avg_sadness %>,
+                                        Anger: <%= chartinput.avg_anger %>,
+                                        Contempt: <%= chartinput.avg_contempt %>,
+                                        Disgust: <%= chartinput.avg_disgust %>,
+                                        Fear: <%= chartinput.avg_fear %>,
+                                        Surprise: <%= chartinput.avg_surprise %>" role="img"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +63,18 @@
                             <div id="flush-collapseTwo" class="accordion-collapse collapse"
                                 data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body">
-                                    <canvas id="triggercanvas" height="200"></canvas>
+                                    <canvas id="triggercanvas" height="200" aria-label="Chart showing average emotion intensity based on triggers.                         
+                                    <% for (var i = 0; i < charttriggers.length; i++) { %>
+                                            trigger: '<%= charttriggers[i].emotrigger_name %>',
+                                            enjoyment: <%= charttriggers[i].avg_enjoyment %>,
+                                            sadness: <%= charttriggers[i].avg_sadness %>,
+                                            anger: <%= charttriggers[i].avg_anger %>,
+                                            contempt: <%= charttriggers[i].avg_contempt %>,
+                                            disgust: <%= charttriggers[i].avg_disgust %>,
+                                            fear: <%= charttriggers[i].avg_fear %>,
+                                            surprise: <%= charttriggers[i].avg_surprise %>
+                                    <% } %>                             Enjoyment: <%= chartinput.avg_enjoyment %>,"
+                                        role="img"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +89,18 @@
                             <div id="flush-collapseThree" class="accordion-collapse collapse"
                                 data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body">
-                                    <canvas id="timecanvas" height="200"></canvas>
+                                    <canvas id="timecanvas" height="200" aria-label="Chart showing emotions over time.
+                                    <% for (var i = 0; i < charttime.length; i++) { %>
+                                        <% var ukTime = new Date(charttime[i].time_stamp).toLocaleString('en-GB', { timeZone: 'Europe/London' }); %>
+                                                date: '<%= ukTime%>',
+                                                enjoyment: <%= charttime[i].enjoyment %>,
+                                                sadness: <%= charttime[i].sadness %>,
+                                                anger: <%= charttime[i].anger %>,
+                                                contempt: <%= charttime[i].contempt %>,
+                                                disgust: <%= charttime[i].disgust %>,
+                                                fear: <%= charttime[i].fear %>,
+                                                surprise: <%= charttime[i].surprise %>
+                                    <% } %>" role="img"></canvas>
                                 </div>
                             </div>
                         </div>
