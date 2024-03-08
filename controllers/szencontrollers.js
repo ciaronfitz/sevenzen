@@ -65,9 +65,6 @@ exports.postNewMoodLog = (req, res) => {
   const isLoggedin = req.session.isloggedin; //isLoggedin is a boolean that will be used to check if the user is logged in
   const user_id = req.session.user_id; //user_id is an integer that will be used to store the user's id
   const { enjoyment, sadness, anger, contempt, disgust, fear, surprise, trigger, usernotes } = req.body; //get details from the request body to store in variables
-  const vals = [user_id, sadness, anger, contempt, disgust, fear, surprise, trigger, usernotes]; //vals is an array that will be used to store the user's id, emotion name, emotion intensity and user notes
-  var emotion_id = 0; //emotion_id is an integer that will be used to store the emotion's id
-  var emotrigger_id = []; //emotrigger_id is an array that will be used to store the triggers' ids - this is necessary because a user can select multiple triggers
   console.log(req.body);
 
   const endpoint = `http://localhost:3001/log/${user_id}`;
